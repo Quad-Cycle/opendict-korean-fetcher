@@ -1,0 +1,9 @@
+README.md
+setup.py
+odk/__init__.py
+odk/odk_fetcher.py
+opendict_korean_fetcher.egg-info/PKG-INFO
+opendict_korean_fetcher.egg-info/SOURCES.txt
+opendict_korean_fetcher.egg-info/dependency_links.txt
+opendict_korean_fetcher.egg-info/requires.txt
+opendict_korean_fetcher.egg-info/top_level.txt
