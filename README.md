@@ -1,0 +1,1 @@
+"# opendict-korean-fetcher" 
