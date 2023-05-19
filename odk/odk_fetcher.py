@@ -1,9 +1,10 @@
 import requests
 import urllib3
 import re
+import apikey
 from bs4 import BeautifulSoup
 
-API_KEY = '8CA544B785A9C6D5E109FDA9D715290B'
+API_KEY = apikey.apikey
 
 class ODKFetcher:
 	relation_info_types = []
