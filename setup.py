@@ -7,7 +7,7 @@ setup(
     description='opendict fetcher to extract related words',
     url='https://github.com/Tri-Cycle/opendict-korean-fetcher',
     packages=find_packages(),
-    install_requires=['requests', 'urllib3', 'beautifulsoup4'],
+    install_requires=['requests', 'urllib3', 'beautifulsoup4', 'neo4j'],
     python_requires='>=3',
     classifiers=[
         'Programming Language :: Python :: 3',

@@ -13,12 +13,13 @@ class ODKReader:
         return re.sub(r"[^\uAC00-\uD7A30-9a-zA-Z\s]", "", str)
 
     def get_data_by_file_reader(self, src):
-        path = 'resources/*.xml'
+        # path = 'resources/*.xml'
         # fileList = glob.glob(path)
         tree = ET.parse(src)
         root = tree.getroot()
         for child in root.findall('item'):
             word = self.strip_special_chars(child.find('wordInfo').find('word').text)
+            if word == '' or not word: continue
             senseInfo = child.find('senseInfo')
             hypernyms = []
 

@@ -1,5 +1,7 @@
 README.md
 setup.py
+graphdbGenerator/__init__.py
+graphdbGenerator/graphdb_generator.py
 odk/__init__.py
 odk/odk_fetcher.py
 odk/odk_xml_reader.py
