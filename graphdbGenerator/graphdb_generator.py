@@ -3,7 +3,7 @@ from neo4j import GraphDatabase
 class GraphDBGenerator:
     uri = 'bolt://localhost:7687'
     username = 'neo4j'
-    password = '2019112073'
+    password = '00000000'
     database_name = 'word-hypernyms'
     driver = GraphDatabase.driver(uri, auth=(username, password), database=database_name)
 
@@ -28,7 +28,7 @@ class GraphDBGenerator:
         print("Completed making create relation queries!")
         return result
 
-    def merge_node_with_relations(self, data):
+    def merge_node_with_relations_queries(data):
         print("Making create nodes with relation queries...")
         result = []
         for word, hypernyms in data:
@@ -37,6 +37,12 @@ class GraphDBGenerator:
                     ("MERGE (a:Word{{name:'{}'}}) MERGE (b:Word{{name:'{}'}}) MERGE (a)-[:HYPERNYM]->(b)".format(word, hypernym))
                 )
         print("Completed making create nodes with relation queries!")
+        return result
+
+    def search_HYPERNYM_queries(self, input_word):
+        print("Making search queries...")
+        result = ("match (a:Word{{name:'{}'}}) - [r:HYPERNYM] -> (b:Word) return a,r,b".format(input_word))
+        print("Completed making search queries!")
         return result
 
     def create_nodes(self, data):
@@ -67,7 +73,7 @@ class GraphDBGenerator:
 
     def create_nodes_with_relations(self, data):
         # 데이터와 관계를 생성하면서 노드 중복 방지하는 쿼리 집합 생성
-        nodes_with_relation_queries =self.merge_node_with_relations(data)
+        nodes_with_relation_queries =self.merge_node_with_relations_queries(data)
         # 쿼리 실행 및 commit
         print("---------------------------------------")
         print("Running create nodes with relation transactions...")
@@ -75,5 +81,15 @@ class GraphDBGenerator:
             with session.begin_transaction() as tx:
                 for query in nodes_with_relation_queries:
                     tx.run(query)
+                tx.commit()
+        print("Commited all of create nodes with relation transactions!")
+
+    def search_HYPERNYM(self, input_word):
+        search_HYPERNYM_queries =self.search_HYPERNYM_queries(input_word)
+        print("---------------------------------------")
+        print("Running create nodes with relation transactions...")
+        with self.driver.session() as session:
+            with session.begin_transaction() as tx:
+                tx.run(search_HYPERNYM_queries)
                 tx.commit()
         print("Commited all of create nodes with relation transactions!")
