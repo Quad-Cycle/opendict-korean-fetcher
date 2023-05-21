@@ -6,5 +6,5 @@ files = ['resources/1146510_150000.xml', 'resources/1146510_50000.xml', 'resourc
 od = odk.ODKReader()
 data = od.get_data_by_file_reader('resources/1146510_50000.xml')
 
-dbGen = graphdbGenerator.GraphDBGenerator
-dbGen.create_nodes_with_relations(dbGen, data)
+dbGen = graphdbGenerator.GraphDBGenerator()
+dbGen.create_nodes_with_relations(data)

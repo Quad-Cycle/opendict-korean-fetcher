@@ -28,7 +28,7 @@ class GraphDBGenerator:
         print("Completed making create relation queries!")
         return result
 
-    def merge_node_with_relations(data):
+    def merge_node_with_relations(self, data):
         print("Making create nodes with relation queries...")
         result = []
         for word, hypernyms in data:
