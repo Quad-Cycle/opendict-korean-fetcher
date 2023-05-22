@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 import re
-import glob
+from lxml import etree
 
 class ODKReader:
     hypernym_set = []
@@ -13,9 +13,10 @@ class ODKReader:
         return re.sub(r"[^\uAC00-\uD7A30-9a-zA-Z\s]", "", str)
 
     def get_data_by_file_reader(self, src):
-        # path = 'resources/*.xml'
-        # fileList = glob.glob(path)
-        tree = ET.parse(src)
+        print("Reading data from [{}] file...".format(src))
+
+        parser = etree.XMLParser(recover=True, encoding='utf-8')
+        tree = ET.parse(src, parser=parser)
         root = tree.getroot()
         for child in root.findall('item'):
             word = self.strip_special_chars(child.find('wordInfo').find('word').text)
@@ -25,7 +26,7 @@ class ODKReader:
 
             # get field data
             fieldInfo = senseInfo.find('cat_info')
-            if fieldInfo:
+            if fieldInfo is not None:
                 field = self.strip_special_chars(fieldInfo.find('cat').text)
                 hypernyms.append(field)
 
@@ -37,4 +38,5 @@ class ODKReader:
                     hypernyms.append(hypernym)
             if hypernyms:
                 self.hypernym_set.append((word, hypernyms))
+        print("Completed reading word with hypernym!\n")
         return self.hypernym_set

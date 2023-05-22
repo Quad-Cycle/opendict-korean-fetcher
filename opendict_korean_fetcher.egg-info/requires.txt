@@ -1,4 +1,0 @@
-requests
-urllib3
-beautifulsoup4
-neo4j

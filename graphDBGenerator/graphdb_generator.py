@@ -28,7 +28,7 @@ class GraphDBGenerator:
         print("Completed making create relation queries!")
         return result
 
-    def merge_node_with_relations_queries(data):
+    def merge_node_with_relations_queries(self, data):
         print("Making create nodes with relation queries...")
         result = []
         for word, hypernyms in data:
@@ -73,7 +73,7 @@ class GraphDBGenerator:
 
     def create_nodes_with_relations(self, data):
         # 데이터와 관계를 생성하면서 노드 중복 방지하는 쿼리 집합 생성
-        nodes_with_relation_queries =self.merge_node_with_relations_queries(data)
+        nodes_with_relation_queries = self.merge_node_with_relations_queries(data)
         # 쿼리 실행 및 commit
         print("---------------------------------------")
         print("Running create nodes with relation transactions...")
@@ -85,7 +85,7 @@ class GraphDBGenerator:
         print("Commited all of create nodes with relation transactions!")
 
     def search_HYPERNYM(self, input_word):
-        search_HYPERNYM_queries =self.search_HYPERNYM_queries(input_word)
+        search_HYPERNYM_queries = self.search_HYPERNYM_queries(input_word)
         print("---------------------------------------")
         print("Running create nodes with relation transactions...")
         with self.driver.session() as session:
