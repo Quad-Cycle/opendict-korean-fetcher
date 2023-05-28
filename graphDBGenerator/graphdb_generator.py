@@ -1,4 +1,5 @@
 from neo4j import GraphDatabase
+import time
 
 class GraphDBGenerator:
     uri = 'bolt://localhost:7687'
@@ -41,7 +42,7 @@ class GraphDBGenerator:
 
     def search_HYPERNYM_queries(self, input_word):
         print("Making search queries...")
-        result = ("match (a:Word{{name:'{}'}}) - [r:HYPERNYM] -> (b:Word) return a,r,b".format(input_word))
+        result = ("match (a:Word{{name:'{}'}}) - [r:HYPERNYM] -> (b:Word) return b.name as hypernym".format(input_word))
         print("Completed making search queries!")
         return result
 
@@ -87,9 +88,13 @@ class GraphDBGenerator:
     def search_HYPERNYM(self, input_word):
         search_HYPERNYM_queries = self.search_HYPERNYM_queries(input_word)
         print("---------------------------------------")
-        print("Running create nodes with relation transactions...")
+        print("Running search nodes with relation transactions...")
         with self.driver.session() as session:
-            with session.begin_transaction() as tx:
-                tx.run(search_HYPERNYM_queries)
-                tx.commit()
-        print("Commited all of create nodes with relation transactions!")
+            start = time.time()
+            results = session.run(search_HYPERNYM_queries)
+            end = time.time()
+            hypernyms = []
+            for record in results:
+                hypernyms.append(record['hypernym'])
+            print(hypernyms)
+            print(f"{end - start:.7f} sec")
