@@ -1,5 +1,6 @@
 from neo4j import GraphDatabase
 import time
+from tqdm import tqdm
 
 class GraphDBGenerator:
     uri = 'bolt://localhost:7687'
@@ -80,7 +81,7 @@ class GraphDBGenerator:
         print("Running create nodes with relation transactions...")
         with self.driver.session() as session:
             with session.begin_transaction() as tx:
-                for query in nodes_with_relation_queries:
+                for query in tqdm(nodes_with_relation_queries):
                     tx.run(query)
                 tx.commit()
         print("Commited all of create nodes with relation transactions!")
