@@ -86,16 +86,24 @@ class GraphDBGenerator:
                 tx.commit()
         print("Commited all of create nodes with relation transactions!")
 
-    def search_HYPERNYM(self, input_word):
-        search_HYPERNYM_queries = self.search_HYPERNYM_queries(input_word)
+    def search_HYPERNYM(self, input_word_list):
+        search_queries = []
+        for input_word in input_word_list:
+            search_queries.append(self.search_HYPERNYM_queries(input_word))
         print("---------------------------------------")
         print("Running search nodes with relation transactions...")
         with self.driver.session() as session:
             start = time.time()
-            results = session.run(search_HYPERNYM_queries)
+            results = set()
+            tmp_results = set() # 상위어 교집합이 없는 경우 합집합으로 결과 리턴
+            for query in search_queries:
+                hypernyms = set()
+                result = session.run(query)
+                for record in result:
+                    hypernym = record['hypernym']
+                    hypernyms.add(hypernym)
+                    tmp_results.add(hypernym)
+                results = results & hypernyms if len(results) != 0 else results | hypernyms
             end = time.time()
-            hypernyms = []
-            for record in results:
-                hypernyms.append(record['hypernym'])
-            print(hypernyms)
+            print(list(results) if len(results) != 0 else list(tmp_results))
             print(f"{end - start:.7f} sec")
