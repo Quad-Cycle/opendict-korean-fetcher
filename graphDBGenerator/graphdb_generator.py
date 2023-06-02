@@ -1,6 +1,7 @@
 from neo4j import GraphDatabase
 import time
 from tqdm import tqdm
+from collections import defaultdict
 
 class GraphDBGenerator:
     uri = 'bolt://localhost:7687'
@@ -94,16 +95,14 @@ class GraphDBGenerator:
         print("Running search nodes with relation transactions...")
         with self.driver.session() as session:
             start = time.time()
-            results = set()
-            tmp_results = set() # 상위어 교집합이 없는 경우 합집합으로 결과 리턴
+            results = defaultdict() # 조회된 모든 상위어와 등장 횟수가 기록된 딕셔너리
             for query in search_queries:
-                hypernyms = set()
-                result = session.run(query)
-                for record in result:
+                query_result = session.run(query)
+                for record in query_result:
                     hypernym = record['hypernym']
-                    hypernyms.add(hypernym)
-                    tmp_results.add(hypernym)
-                results = results & hypernyms if len(results) != 0 else results | hypernyms
+                    if hypernym:
+                        results[hypernym] += 1 # 상위어 등장 횟수 +1
             end = time.time()
-            print(list(results) if len(results) != 0 else list(tmp_results))
+            # 등장 횟수 내림차순으로 정렬 후 출력
+            print(sorted(results.items(), key=lambda item: item[1], reverse=True))
             print(f"{end - start:.7f} sec")
