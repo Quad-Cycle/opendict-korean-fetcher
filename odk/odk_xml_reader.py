@@ -13,6 +13,7 @@ class ODKReader:
         return re.sub(r"[^\uAC00-\uD7A30-9a-zA-Z\s]", "", str)
 
     def get_data_by_file_reader(self, src):
+        self.hypernym_set = []
         print("Reading data from [{}] file...".format(src))
 
         parser = etree.XMLParser(recover=True, encoding='utf-8')
