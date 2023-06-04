@@ -101,7 +101,7 @@ class GraphDBGenerator:
                 for record in query_result:
                     hypernym = record['hypernym']
                     if hypernym:
-                        results[hypernym] += 1 # 상위어 등장 횟수 +1
+                        results[hypernym] = results.get(hypernym, 0)+1 # 상위어 등장 횟수 +1
             end = time.time()
             # 등장 횟수 내림차순으로 정렬 후 출력
             print(sorted(results.items(), key=lambda item: item[1], reverse=True))
