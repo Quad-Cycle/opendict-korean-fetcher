@@ -105,4 +105,4 @@ class GraphDBGenerator:
             end = time.time()
             # 등장 횟수 내림차순으로 정렬 후 출력
             print(sorted(results.items(), key=lambda item: item[1], reverse=True))
-            print(f"{end - start:.7f} sec")
+            # print(f"{end - start:.7f} sec")

@@ -11,4 +11,5 @@ dbGen = graphDBGenerator.GraphDBGenerator()
 #     dbGen.create_nodes_with_relations(data)
 
 # search word
-dbGen.search_HYPERNYM(['경북', '경남'])
+word_lst = list(map(str, input().split()))
+dbGen.search_HYPERNYM(word_lst)
